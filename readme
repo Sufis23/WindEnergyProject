@@ -1,0 +1,29 @@
+# Alberta Wind Energy Site Selection & Probabilistic Risk Forecasting
+
+An end-to-end Python pipeline for macro-level wind farm site selection, atmospheric volatility mapping, and stochastic risk forecasting across Alberta, Canada.
+
+---
+
+## **Project Overview**
+Choosing the wrong location for a utility-scale wind farm can cost millions and destabilize regional power grids. This project solves two core problems using automated data collection and statistical modeling:
+1. **Optimal Site Selection:** Pinpoints geographical sweet-spots where wind resources are both high in magnitude and stable/low in turbulence over time.
+2. **Stochastic Risk Profiling:** Leverages Weibull distribution fitting and Monte Carlo simulations ($5,000$ runs per site) to generate probabilistic **P10 (pessimistic), P50 (expected), and P90 (optimistic)** confidence envelopes for robust grid planning.
+
+---
+
+## **Key Methodology & Pipeline Phases**
+* **Phase 1 (Spatiotemporal Data Collection):** Programmatically queries the **Open-Meteo Historical Archive API** for hourly surface wind records ($10\text{m}$, $\text{m/s}$) across a uniform provincial grid spanning Alberta (`49.0°N` to `60.0°N`, `-120.0°W` to `-110.0°W`) for the full year of 2024.
+* **Phase 2 (Spatial Variance & Volatility Mapping):** Computes long-term temporal means ($\mu$) and discrete temporal first derivatives ($\left\vert{}\frac{dv}{dt}\right\vert{}$) to isolate smooth, laminar airflow from erratic, turbulent zones using a composite **Sweet-Spot Index**.
+* **Phase 3 (Stochastic Modeling & Monte Carlo Simulation):** Fits a two-parameter **Weibull distribution** ($A$ scale parameter for wind magnitude, $k$ shape parameter for consistency) to candidate sites and executes inverse transform sampling Monte Carlo simulations to model atmospheric uncertainty.
+* **Phase 4 (Interactive Mapping & Zoning):** Integrates regional findings into a multi-layer **Folium web map** featuring toggleable raster contours, major Alberta population hubs, and interactive station markers with risk-profile tooltips.
+
+---
+
+## **Repository Structure**
+```text
+├── wind_energy_project.ipynb         # Main Jupyter Notebook containing all code, analyses, and maps
+├── wind_contour_overlay.png          # Exported raster layer: Mean Wind Speed (Turbo)
+├── wind_derivative_contour.png       # Exported raster layer: Turbulence / Volatility (Plasma)
+├── wind_sweetspot_contour.png        # Exported raster layer: Sweet-Spot Index (Viridis)
+├── wind_final_optimal_contour.png    # Exported raster layer: Stochastic Risk-Optimized Zones (Magma)
+└── README.md                         # Project documentation
